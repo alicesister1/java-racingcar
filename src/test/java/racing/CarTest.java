@@ -39,8 +39,10 @@ class CarTest {
     void compareToTest(String nameA, Boolean moveA, String nameB, Boolean moveB, Integer result) {
         Car carA = new Car(nameA);
         carA.run(() -> moveA);
+
         Car carB = new Car(nameB);
         carB.run(() -> moveB);
+
         assertThat(carA.compareTo(carB)).isEqualTo(result);
     }
 
@@ -72,7 +74,9 @@ class CarTest {
     void carCompareTest() {
         Car carA = new Car("carA");
         carA.run(() -> true);
+
         Car carB = new Car("carB");
+
         assertThat(carA.compareTo(carB) > 0).isTrue();
     }
 }
