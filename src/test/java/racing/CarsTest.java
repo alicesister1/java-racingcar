@@ -28,14 +28,14 @@ class CarsTest {
     @DisplayName("자동차들은 이동후 Position 증가한다")
     @Test
     void carMoveForward() {
-        testCars.run(() -> true);
+        testCars.run(new CarHaveToMoveStrategyImpl());
         assertThat(testCars.getCars()).allMatch(car -> car.getPosition().getCurrentPosition() == 1);
     }
 
     @DisplayName("특정 위치에 해당하는 자동차를 반환한다")
     @Test
     void getCarsEqualsPositionTest() {
-        testCars.run(() -> true);
+        testCars.run(new CarHaveToMoveStrategyImpl());
         assertThat(testCars.getCarsEqualsPosition(new Position(1))).hasSize(3);
     }
 
@@ -45,7 +45,7 @@ class CarsTest {
         List<Car> cars = testCars.getCars();
         Car car = cars.get(cars.size() - 1);
         for (int i = 0; i < 2; i++) {
-            car.run(() -> true);
+            car.run(new CarHaveToMoveStrategyImpl());
         }
 
         assertThat(testCars.getMaxPosition().getCurrentPosition()).isEqualTo(2);
