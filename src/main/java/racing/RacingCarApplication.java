@@ -17,13 +17,13 @@ public class RacingCarApplication {
         int numMoves = inputView.getNumMoves();
 
         CarMoveStrategy carMoveStrategy = new CarMoveStrategyImpl(new CustomRandomImpl());
-        RacingCarGame racingCarGame = new RacingCarGame(nameOfCars, carMoveStrategy);
+        RacingCarGame racingCarGame = new RacingCarGame();
 
         ResultView resultView = ResultView.getInstance();
         Cars cars = racingCarGame.getCars();
         resultView.startPrint();
         for (int i = 0; i < numMoves; i++) {
-            racingCarGame.run(numMoves);
+            racingCarGame.run(numMoves, nameOfCars, carMoveStrategy);
             resultView.printRound(cars);
         }
         resultView.printWinner(racingCarGame.getWinner());
