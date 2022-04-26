@@ -3,13 +3,19 @@ package racing;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import racing.domain.Car;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import racing.domain.Cars;
 import racing.domain.Position;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -40,14 +46,37 @@ class CarsTest {
     }
 
     @DisplayName("제일 많이 전진한 자동차의 위치 가져온다")
-    @Test
-    void getMaxPositionTest() {
-        List<Car> cars = testCars.getCars();
-        Car car = cars.get(cars.size() - 1);
-        for (int i = 0; i < 2; i++) {
-            car.run(new CarHaveToMoveStrategyImpl());
-        }
+    @ArgumentsSource(value = MyArgumentsProvider.class)
+    @ParameterizedTest
+    void getMaxPositionTest(Cars cars) {
+        assertThat(cars.getMaxPosition().getCurrentPosition()).isEqualTo(2);
+    }
 
-        assertThat(testCars.getMaxPosition().getCurrentPosition()).isEqualTo(2);
+    @DisplayName("제일 많이 전진한 자동차의 대수를 가져온다")
+    @MethodSource("provideSource")
+    @ParameterizedTest
+    void getMaxPositionTest(Cars cars, int expected) {
+        assertThat(cars.getCarsEqualsPosition(cars.getMaxPosition())).hasSize(expected);
+    }
+
+    private static Stream<Arguments> provideSource() {
+        Cars firstCars = new Cars(List.of("CarA", "CarB"));
+        firstCars.run(new CarHaveToMoveStrategyImpl());
+        firstCars.run(new CarHaveToMoveStrategyImpl());
+
+        Cars secondCars = new Cars(List.of("CarA", "CarB"));
+        secondCars.run(new CarHaveToMoveStrategyImpl());
+
+        return Stream.of(Arguments.of(firstCars, 2), Arguments.of(secondCars, 2));
+    }
+
+    static class MyArgumentsProvider implements ArgumentsProvider {
+        @Override
+        public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+            Cars cars = new Cars(List.of("CarA", "CarB"));
+            cars.run(new CarHaveToMoveStrategyImpl());
+            cars.run(new CarHaveToMoveStrategyImpl());
+            return Stream.of(cars).map(Arguments::of);
+        }
     }
 }
