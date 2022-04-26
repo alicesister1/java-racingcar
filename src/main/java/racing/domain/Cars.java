@@ -16,9 +16,7 @@ public class Cars {
         if (nameOfCars == null || nameOfCars.isEmpty()) {
             throw new IllegalArgumentException(EMPTY_CARS_MESSAGE);
         }
-        cars = nameOfCars.stream()
-                .map(Car::new)
-                .collect(Collectors.toList());
+        cars = nameOfCars.stream().map(Car::new).collect(Collectors.toList());
     }
 
     public void run(CarMoveStrategy moveStrategy) {
@@ -28,13 +26,10 @@ public class Cars {
 
     public List<Car> getCarsEqualsPosition(Position position) {
         Objects.requireNonNull(position);
-        return cars.stream()
-                .filter(car -> car.getPosition().equals(position))
-                .collect(Collectors.toList());
+        return cars.stream().filter(car -> car.getPosition().equals(position)).collect(Collectors.toList());
     }
 
     public Position getMaxPosition() {
-        cars.sort(Car::compareTo);
         return Collections.max(cars, Comparator.comparing(Car::getPosition)).getPosition();
     }
 
