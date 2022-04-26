@@ -1,12 +1,10 @@
 package racing.service;
 
-import racing.domain.Car;
 import racing.domain.Cars;
 import racing.domain.Position;
 import racing.domain.strategies.CarMoveStrategy;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class RacingCarGame {
     private static final int MINIMUM_NUMBER_OF_MOVES = 1;
@@ -34,9 +32,7 @@ public class RacingCarGame {
 
     public List<String> getWinner() {
         Position maxPosition = cars.getMaxPosition();
-        return cars.getCarsEqualsPosition(maxPosition)
-                .stream().map(Car::getName)
-                .collect(Collectors.toList());
+        return cars.getCarsEqualsPosition(maxPosition);
     }
 
     public Cars getCars() {

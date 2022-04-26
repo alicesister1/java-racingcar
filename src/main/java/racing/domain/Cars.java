@@ -24,9 +24,12 @@ public class Cars {
         cars.forEach(car -> car.run(moveStrategy));
     }
 
-    public List<Car> getCarsEqualsPosition(Position position) {
+    public List<String> getCarsEqualsPosition(Position position) {
         Objects.requireNonNull(position);
-        return cars.stream().filter(car -> car.getPosition().equals(position)).collect(Collectors.toList());
+        return cars.stream()
+                .filter(car -> car.getPosition().equals(position))
+                .map(Car::getName)
+                .collect(Collectors.toList());
     }
 
     public Position getMaxPosition() {
